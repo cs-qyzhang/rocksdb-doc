@@ -4,7 +4,7 @@ date: 2020-05-15
 lastmod: 2020-05-16
 ---
 
-Hugo 可以使用多种标记式语言编写，如Markdown, reStructuredText, AsciiDoc, HTML
+Hugo可以使用多种标记式语言编写，如Markdown, reStructuredText, AsciiDoc, HTML
 等。下面主要介绍Hugo中Markdown的用法。
 
 Markdown的基本语法这里不再进行介绍，可自行搜索学习。
