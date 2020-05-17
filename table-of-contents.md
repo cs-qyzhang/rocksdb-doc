@@ -1,8 +1,8 @@
 ## _index.md
 
-## "compile"
+## "准备工作"
 
-### compile.md
+### install.md
 
 ### hugo-usage.md
 
