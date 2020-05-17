@@ -30,6 +30,6 @@ RocksDB根目录下有`Makefile`文件和`CMakeLists.txt`文件，这意味着�
 
 {{< alert note >}}
 如果你使用**Visual Studio Code**，且安装了CMake Tools扩展，那么在打开项目时该扩展可能会自动进行cmake配置，自动生成build文件但却没有生成`Makefile`，无法编译。这时只需要将build文件删除重新运行上面叙述的几个命令即可。(TODO: 了解一下为什么自动进行的cmake配置不包含Makefile)
-{{< \alert >}}
+{{< /alert >}}
 
 编译好之后你就会在build文件夹下发现`librocksdb.a`和`librocksdb.so`文件。
