@@ -21,6 +21,40 @@ authors: ["周树人", "鲁迅"]
 ---
 ```
 
+## 目录组织
+
+Hugo原有的目录组织方式比较麻烦，需要在每一个文件的Front Matter中指定所在的章节以及章节中的次序，这样会造成难于修改目录组织方式。为了方便进行目录组织，我修改了模板生成目录的方式，加入了`table-of-contents.md`这一文件，之后只需要在该文件中进行目录组织即可。
+
+`table-of-contents.md`应该具有以下形式：
+
+```md
+## _index.md
+
+## "准备工作"
+
+### hugo-usage.md
+
+### install.md
+
+## data-structure.md
+
+### slice.md
+
+### cache.md
+```
+
+这里##代表的是目录的一级标题，###代表的是目录的二级标题，目录的层次和顺序按照在该文件中出现的顺序指定。若一个目录项对应的是一个.md文件，则应该写上该文件的文件名。若一个目录项没有实际的内容，只是作为一个大标题，那么可以直接用双引号将标题括起来，如上面的"准备工作"。
+
+如果用.md文件代表一个目录项那么该目录项的标题默认为.md文件Front Matter中指定的title。如果在.md文件的Front Matter中指定了linktitle这一属性，那么目录项对应的标题就变成了linktitle对应的内容。比如`_index.md`文件的title是“RocksDB”，linktitle是“概述”，那么在目录中出现的题目就是“概述”而不是“RocksDB”。
+
+{{< alert note >}}
+文件名在命名时请使用小写英文字母，且使用连字符`-`进行连接而不要是用下划线`_`。比如要使用`hugo-usage.md`而不是`hugo_usage.md`。
+{{< /alert >}}
+
+{{< alert warning >}}
+`_index.md`是一个特殊的文件，指定了该文档的首页，请不要修改该文件的文件名
+{{< /alert>}}
+
 ## 插入图片
 
 有两种方法可以插入图片：
@@ -122,6 +156,42 @@ int main(void) {
 | `15:04`                           | Time              |
 | `3:04 PM`                         |                   |
 | `15:04 MST`                       |                   |
+
+## 代办事项
+
+    - [x] 吃饭
+    - [x] 睡觉
+    - [ ] 打豆豆
+
+会生成：
+
+- [x] 吃饭
+- [x] 睡觉
+- [ ] 打豆豆
+
+## 脚注
+
+    本网站使用的是Hugo框架[^1]，主体采用的为Academic[^2]。
+    [^1]: <https://gohugo.io/>
+    [^2]: <https://sourcethemes.com/academic/>
+
+会生成：
+
+本网站使用的是Hugo框架[^1]，主体采用的为Academic[^2]。
+[^1]: <https://gohugo.io/>
+[^2]: <https://sourcethemes.com/academic/>
+
+可以使用脚注来引用参考文献。
+
+## LaTeX 数学公式
+
+```tex
+$$\gamma_{n} = \frac{ \left | \left (\mathbf x_{n} - \mathbf x_{n-1} \right )^T \left [\nabla F (\mathbf x_{n}) - \nabla F (\mathbf x_{n-1}) \right ] \right |} {\left \|\nabla F(\mathbf{x}_{n}) - \nabla F(\mathbf{x}_{n-1}) \right \|^2}$$
+```
+
+会生成：
+
+$$\gamma_{n} = \frac{ \left | \left (\mathbf x_{n} - \mathbf x_{n-1} \right )^T \left [\nabla F (\mathbf x_{n}) - \nabla F (\mathbf x_{n-1}) \right ] \right |} {\left \|\nabla F(\mathbf{x}_{n}) - \nabla F(\mathbf{x}_{n-1}) \right \|^2}$$
 
 ## 警告⚠️框
 

@@ -2,9 +2,9 @@
 
 ## "准备工作"
 
-### install.md
-
 ### hugo-usage.md
+
+### install.md
 
 ## data-structure.md
 
