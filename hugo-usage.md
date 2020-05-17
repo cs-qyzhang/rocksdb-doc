@@ -1,7 +1,8 @@
 ---
 title: "Hugo 用法"
 date: 2020-05-15
-lastmod: 2020-05-16
+lastmod: 2020-05-17
+authors: ["张丘洋"]
 ---
 
 Hugo可以使用多种标记式语言编写，如Markdown, reStructuredText, AsciiDoc, HTML等。下面主要介绍Hugo中Markdown的用法。
@@ -25,7 +26,7 @@ authors: ["周树人", "鲁迅"]
 
 Hugo原有的目录组织方式比较麻烦，需要在每一个文件的Front Matter中指定所在的章节以及章节中的次序，这样会造成难于修改目录组织方式。为了方便进行目录组织，我修改了模板生成目录的方式，加入了`table-of-contents.md`这一文件，之后只需要在该文件中进行目录组织即可。
 
-`table-of-contents.md`应该具有以下形式：
+`table-of-contents.md`应该具有以下形式（注意该文件不需要Front Matter）：
 
 ```md
 ## _index.md
