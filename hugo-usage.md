@@ -48,7 +48,7 @@ Hugo原有的目录组织方式比较麻烦，需要在每一个文件的Front M
 如果用.md文件代表一个目录项那么该目录项的标题默认为.md文件Front Matter中指定的title。如果在.md文件的Front Matter中指定了linktitle这一属性，那么目录项对应的标题就变成了linktitle对应的内容。比如`_index.md`文件的title是“RocksDB”，linktitle是“概述”，那么在目录中出现的题目就是“概述”而不是“RocksDB”。
 
 {{< alert note >}}
-文件名在命名时请使用小写英文字母，且使用连字符`-`进行连接而不要是用下划线`_`。比如要使用`hugo-usage.md`而不是`hugo_usage.md`。
+文件名在命名时请使用小写英文字母，且使用连字符`-`进行连接而不要使用下划线`_`。比如要使用`hugo-usage.md`而不是`hugo_usage.md`。
 {{< /alert >}}
 
 {{< alert warning >}}
@@ -91,7 +91,7 @@ Hugo原有的目录组织方式比较麻烦，需要在每一个文件的Front M
 
 同一文档交叉引用：`[图片插入](#插入图片)` -> [图片插入](#插入图片)
 
-不同文档交叉引用：`[编译]({{</* relref "compile.md#custom-theme" */>}})` -> [编译]({{< relref "compile.md#custom-theme" >}})
+不同文档交叉引用：`[编译]({{</* relref "install.md#编译" */>}})` -> [编译]({{< relref "install.md#编译" >}})
 
 ## 代码
 
