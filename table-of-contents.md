@@ -6,7 +6,7 @@
 
 ### hugo-usage.md
 
-## ds.md
+## data-structure.md
 
 ### slice.md
 

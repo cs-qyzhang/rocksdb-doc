@@ -2,5 +2,5 @@
 title: "数据结构"
 date: 2020-05-15
 lastmod: 2020-05-15
-authors: ["张丘洋"]
+authors: []
 ---

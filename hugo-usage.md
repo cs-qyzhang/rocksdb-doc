@@ -1,21 +1,16 @@
 ---
-title: "Hugo用法"
+title: "Hugo 用法"
 date: 2020-05-15
 lastmod: 2020-05-16
 ---
 
-Hugo可以使用多种标记式语言编写，如Markdown, reStructuredText, AsciiDoc, HTML
-等。下面主要介绍Hugo中Markdown的用法。
+Hugo可以使用多种标记式语言编写，如Markdown, reStructuredText, AsciiDoc, HTML等。下面主要介绍Hugo中Markdown的用法。
 
 Markdown的基本语法这里不再进行介绍，可自行搜索学习。
 
 ## Front Matter
 
-Front Matter是Hugo中用来表示文档的元数据，如题目、时间、文档类型、分类等。
-Front Matter在每个文档的开始，可以使用YAML, TOML, JSON或ORG这四种格式来表示。
-其中YAML是使用`---`分隔的，TOML是使用`+++`分隔的。该文档采用的就是YAML格式。
-在编写文档时，请保证每个文档的Front Matter都有**title**(标题), **date**(创建
-日期), **lastmod**(最后一次修改日期)和**authors**(作者)这四种信息，如：
+Front Matter是Hugo中用来表示文档的元数据，如题目、时间、文档类型、分类等。Front Matter在每个文档的开始，可以使用YAML, TOML, JSON或ORG这四种格式来表示。其中YAML是使用`---`分隔的，TOML是使用`+++`分隔的。该文档采用的就是YAML格式。在编写文档时，请保证每个文档的Front Matter都有**title**（标题）, **date**（创建日期）, **lastmod**（最后一次修改日期）和**authors**（作者）这四种信息，如：
 
 ```yaml
 ---
@@ -32,9 +27,7 @@ authors: ["周树人", "鲁迅"]
 
 **使用Markdown语法**：
 
-```markdown
-![example](example.png)
-```
+    ![example](example.png)
 
 ![example](example.png)
 
@@ -53,7 +46,7 @@ authors: ["周树人", "鲁迅"]
 {{< figure src="example.png" title="仙剑奇侠传" width=70% >}}
 
 {{< alert note >}}
-**注意**：图片要放在与该文档名称相同的文件夹下
+**注意**：图片要放在与该文档名称相同的文件夹下。
 {{< /alert >}}
 
 ## 链接与交叉引用
@@ -68,43 +61,86 @@ authors: ["周树人", "鲁迅"]
 
 ## 代码
 
-```c
-#include <stdio.h>
+    ```C++
+    #include <iostream>
+
+    using namespace std;
+
+    int main(void) {
+        cout << "hello, hugo!" << endl;
+        return 0;
+    }
+    ```
+
+会生成：
+
+```C++
+#include <iostream>
+
+using namespace std;
 
 int main(void) {
-    printf("hello, hugo!\n");
+    cout << "hello, hugo!" << endl;
     return 0;
 }
 ```
 
-```go
-import "text/template"
-```
+## 句子引用
+
+    > All problems in computer science can be solved by
+    > another level of indirection, except for the problem
+    > of too many layers of indirection. – David J. Wheeler
+
+会生成：
+
+> All problems in computer science can be solved by
+> another level of indirection, except for the problem
+> of too many layers of indirection. – David J. Wheeler
 
 ## 表格
 
+    | Format                            | Type              |
+    |-----------------------------------|-------------------|
+    | `January 2, 2006`                 | Date              |
+    | `01/02/06`                        |                   |
+    | `Jan-02-06`                       |                   |
+    | `Mon, 02 Jan 2006`                |                   |
+    | `Monday, 02 Jan 2006`             |                   |
+    | `15:04`                           | Time              |
+    | `3:04 PM`                         |                   |
+    | `15:04 MST`                       |                   |
+
+会生成：
+
+| Format                            | Type              |
+|-----------------------------------|-------------------|
+| `January 2, 2006`                 | Date              |
+| `01/02/06`                        |                   |
+| `Jan-02-06`                       |                   |
+| `Mon, 02 Jan 2006`                |                   |
+| `Monday, 02 Jan 2006`             |                   |
+| `15:04`                           | Time              |
+| `3:04 PM`                         |                   |
+| `15:04 MST`                       |                   |
+
 ## 警告⚠️框
 
-```markdown
-{{%/* alert note */%}}
+    {{</* alert note */>}}
+    **警方提示：**
+
+    道路千万条，安全第一条，行车不规范，亲人两行泪
+    {{</* /alert */>}}
+
+{{< alert note >}}
 **警方提示：**
 
 道路千万条，安全第一条，行车不规范，亲人两行泪
-{{%/* /alert */%}}
-```
+{{< /alert >}}
 
-{{% alert note %}}
-**警方提示：**
+    {{</* alert warning */>}}
+    Here's some important information...
+    {{</* /alert */>}}
 
-道路千万条，安全第一条，行车不规范，亲人两行泪
-{{% /alert %}}
-
-```md
-{{%/* alert warning */%}}
+{{< alert warning >}}
 Here's some important information...
-{{%/* /alert */%}}
-```
-
-{{% alert warning %}}
-Here's some important information...
-{{% /alert %}}
+{{< /alert >}}
