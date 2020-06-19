@@ -1,16 +1,28 @@
 \documentclass{standalone}
+\usepackage{ctex}
 \usepackage{tikz}
 \usetikzlibrary{positioning,calc}
 
 \begin{document}
 \begin{tikzpicture}[every node/.style={inner sep=0pt}]
-  \node at (0,0)    (0) {0x123456};
-  \node[below=of 0] (1) {000};
+  \node at (0,0) (1) {000};
   \node[anchor=west,right=0pt of 1.east] (2) {10010 00};
   \node[anchor=west,right=0pt of 2.east] (3) {110100 0};
   \node[anchor=west,right=0pt of 3.east] (4) {1010110};
   \draw[thick,red!50] ($(2.south west)+(.5pt,-.8pt)$) -- ($(2.south east)+(-.5pt,-.8pt)$);
   \draw[thick,blue!50] ($(3.south west)+(.5pt,-.8pt)$) -- ($(3.south east)+(-.5pt,-.8pt)$);
-  \draw[thick,green!50] ($(4.south west)+(.5pt,-.8pt)$) -- ($(4.south east)+(-.5pt,-.8pt)$);
+  \draw[thick,gray] ($(4.south west)+(.5pt,-.8pt)$) -- ($(4.south east)+(-.5pt,-.8pt)$);
+
+  \node[below=5ex of 4.east,anchor=east] (5) {01001000};
+  \node[left=0pt of 5.west,anchor=east] (6) {11101000\ \ };
+  \node[left=0pt of 6.west,anchor=east] (7) {11001000\ \ };
+  \draw[thick,red!50] ($(5.south west)+(1.3ex+.5pt,-.8pt)$) -- ($(5.south east)+(-.5pt,-.8pt)$);
+  \draw[thick,blue!50] ($(6.south west)+(1.3ex+.5pt,-.8pt)$) -- ($(6.south east)+(-.5pt-.8ex,-.8pt)$);
+  \draw[thick,gray] ($(7.south west)+(1.3ex+.5pt,-.8pt)$) -- ($(7.south east)+(-.5pt-.8ex,-.8pt)$);
+
+  \node[left=1ex of 1.west] (8) {编码前：};
+  \node[left=1ex of 7.west] {编码后：};
+
+  \node[above=5ex of 8.west,anchor=west] {0x123456};
 \end{tikzpicture}
 \end{document}
