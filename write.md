@@ -63,9 +63,10 @@ type 共有四种：FULL、FIRST、MIDDLE、LAST。如果一个`WriteBatch`编�
 在 LevelDB 中一共有以下几种键的表示：UserKey, `InternalKey`, `ParsedInternalKey`, `LookupKey`。
 
 1. UserKey。UserKey 表示用户给定的原始键，在 LevelDB 中没有一个单独的类用于表示，一般使用的是 `Slice` 表示 UserKey。
-2. `InternalKey`。`InternalKey` 表示 LevelDB 内部使用键类型，对原始键进行了封装，增加了**序列号**和**类型**两个内容。其中**类型**包括 `kTypeDeletion` 和 `kTypeValue` 两种，分别表示 Put 和 Delete 操作。`InternalKey` 内使用字符串来表示编码后的键，其编码方式为：
-    UserKey + ((SequenceNum << 8) | Type)
-其中序列号和类型一共占用了 8 字节长度。
+2. `InternalKey`。`InternalKey` 表示 LevelDB 内部使用键类型，对原始键进行了封装，增加了**序列号**和**类型**两个内容。其中**类型**包括 `kTypeDeletion` 和 `kTypeValue` 两种，分别表示 Put 和 Delete 操作。`InternalKey` 内使用字符串来表示编码后的键，其编码方式如下所示，其中序列号和类型一共占用了 8 字节长度。
+
+        UserKey + ((SequenceNum << 8) | Type)
+
 3. `ParsedInternalKey`。`ParsedInternalKey` 类用于简化对 `InternalKey` 的操作，`InternalKey` 中使用字符串对原始键、序列号和类型进行编码，而 `ParsedInternalKey` 则将原始键、序列号和类型通过类的成员进行表示。
 
     ```C++
@@ -78,10 +79,9 @@ type 共有四种：FULL、FIRST、MIDDLE、LAST。如果一个`WriteBatch`编�
 
 4. `LookupKey`。`LookupKey` 用于 Get 操作，其在 `InternalKey` 的基础上又添加了 UserKey 的长度。`LookupKey` 的编码如下所示。
 
-    | klength (varint32) | userkey (char[klength]) | tag (uint64) |
+        | klength (varint32) | userkey (char[klength]) | tag (uint64) |
 
-其中的 tag 和 `InternalKey` 中的后 8 位一样，为 `((SequenceNum << 8) | Type)`。
-能够看到 `LookupKey` 的表示和 Memtable 中跳表节点所保存的前半部分内容一致，所以 `LookupKey` 可以作为在 Memtable 查找的键类型。另外 `LookupKey` 若去掉了最前面的 klength 则就转化为了 `InternalKey` 类型。
+    其中的 tag 和 `InternalKey` 中的后 8 位一样，为 `((SequenceNum << 8) | Type)`。能够看到 `LookupKey` 的表示和 Memtable 中跳表节点所保存的前半部分内容一致，所以 `LookupKey` 可以作为在 Memtable 查找的键类型。另外 `LookupKey` 若去掉了最前面的 klength 则就转化为了 `InternalKey` 类型。
 
 Memtable 使用 `LookupKey` 在查找时会进行键的比较，而在比较时会按照序列号的**降序**进行查找，也就是序列号大的优先级高。而序列号和键的类型（`kTypeDeletion` 或 `kTypeValue`）是编码到一起的：`((SequenceNum << 8) | Type)`，所以在构造 `LookupKey` 进行 Get 操作时键的类型会设置为enum中值最大的那个，在这里值最大的是`kTypeValue`。
 
