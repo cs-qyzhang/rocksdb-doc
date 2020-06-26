@@ -31,4 +31,40 @@ LevelDB 中使用跳表来作为 Memtable 的数据结构。跳表是在链表�
 
 `Memtable` 类中主要的数据结构就是跳表，使用跳表来存储键值对信息。`Memtable` 类也定义了迭代器，该迭代器类就是对跳表迭代器的封装，在实现时直接调用了跳表迭代器的对应函数。
 
-## 
+## SSTable
+
+SSTable 是由块组成的，每一个块用 `Block` 类来表示。`Block` 类中定义了 `Block::Iter` 子类作为 `Block` 的迭代器。该迭代器用于遍历 `Block` 中的键值对，在遍历时迭代器会自动拼接键的共享部分和私有部分组成完整的键。
+
+## IteratorWrapper
+
+`IteratorWrapper` 是对一个 `Iterator` 的简单封装。其他 `Iterator` 中的 `key()` 和 `value()` 函数在每次调用时都会读取对应的数据结构，从数据结构中读取对应的键值信息。而 `IteratorWrapper` 类则缓存了 `key_` 和 `valid_` 属性，这样可以减少虚函数的调用，并且提供更好的缓存局部性。
+
+## TwoLevelIterator
+
+一个 SSTable 中包含了很多块，而每个块中又包含了多个键值对。为了遍历一个 SSTable 中所有的键值对，一般我们可能会使用两层循环来遍历：
+
+```C++
+for (auto block : sstable) {
+  for (auto pair : block) {
+    ...
+  }
+}
+```
+
+而在 LevelDB 中，引入了两层迭代器 `TwoLevelIterator` 来做这件事。`TwoLevelIterator` 包含了 `index_iter_` 和 `data_iter_`，其中 `index_iter_` 用于遍历 SSTable 中的索引块来提取每一个块对应的位置，`data_iter_` 则是从当前 `index_iter_` 指向的块中遍历内部的键值对。`index_iter_` 和 `data_iter_` 是经过 `IteratorWrapper` 包装后的 `Block::Iter` 迭代器。
+
+在查找时由于 SSTable 中块以及块的数据都是按顺序排列的，所以可以进行二分查找。首先会在 `index_iter_` 上二分查找到对应的块，再在 `data_iter_` 上二分查找到对应的键值对。
+
+## MergingIterator
+
+在两层迭代器之上，还创建了用于 Compaction 的 `MergingIterator`。`MergingIterator` 内部包含了 n 个子迭代器，当调用 `SeekToFirst()` 时，所有的子迭代器都会调用相应的 `SeekToFirst()`。`MergingIterator` 当前指向的键值对是 n 个子迭代器中指向键值对最小的那个。在调用 `Next()` 指向下一个键值对时，`MergingIterator` 会将当前指向键值对最小的那个迭代器向后移动一步。由于所有子迭代器都是按顺序访问的，而 `MergingIterator` 又是按照子迭代器指向的大小进行访问的，所以 `MergingIterator` 相当于按顺序同时访问多个数据结构。
+
+`MergingIterator` 内部的子迭代器可以是 `TwoLevelIterator`，这样对底层的封装就更深了一步。
+
+## 总结
+
+LevelDB 中使用了很多的迭代器来对数据进行封装。以往迭代器可能只会出现在单个数据结构中，用于方便地访问单个数据结构的数据。而在 LevelDB 中，迭代器不仅可以访问单个数据结构，还可以访问保存在文件中的数据，而且多个迭代器还可以按层次进行组合形成更高层的迭代器。
+
+在刚开始看的时候感觉有这么多迭代器看起来好复杂，以为引入迭代器只是为了定义一个比较通用的接口。可看了这么多迭代器的实现之后我发现，LevelDB 中引入迭代器不只是因为 C++ 使用迭代器的习惯，更多的是对底层数据结构进行封装，将底层的数据结构变得抽象。无论底层的数据是文件还是内存中的数据结构，无论数据是分了多少层次来保存，我们都可以使用迭代器来统一地进行访问。能够看到，使用迭代器的这些结构都有一个共同点，那就是**有序**。因此可以总结出一点，只要是定义了某种顺序的结构都可以使用迭代器进行访问。
+
+特别是 LevelDB 中使用的 `TwoLevelIterator` 和 `MergingIterator`，这二者的使用让我大开眼界。在之前，对于多层次的数据访问往往是采用多层循环的方式，有几层数据就有几层循环。而引入了多层迭代器之后不再需要使用循环，只需要使用统一的迭代器接口就可以访问，这样对数据进行了更深一步的抽象。
